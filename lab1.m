@@ -19,7 +19,13 @@ t_span = [0 20];
 
 x_0 = [0 0 0 0 20 -20]; W_EE = [0 0 0];
 
-[t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0);
+options = odeset('Reltol',1e-8,'AbsTol',1e-8);
+[t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0, options);
+
+figure
+plot3(x(:,1),x(:,2),-x(:,3))
+grid on
+xlabel('X'); ylabel('Y'); zlabel('Z')
 
 
 %% Function
