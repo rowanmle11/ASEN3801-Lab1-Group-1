@@ -31,58 +31,47 @@ xlabel('X'); ylabel('Y'); zlabel('Z')
 
 %% Problem 2d
 
-store_n = zeros(4);
+wind_speeds = [0,5,10,15,20,25,30,35,40,45,50];
+
+distance_x = zeros(length(wind_speeds),1);
 
 % (initial x coord of landing position) + wind in North direction
-W_EE = [5 0 0];
-[t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0, options);
+for i = 1:length(wind_speeds)
 
-store_n(1) = x(end,1);
+    W_EE = [wind_speeds(i) 0 0];
+    [t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0, options);
+    distance_x(i) = x(end,1);
 
-W_EE = [10 0 0];
-[t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0, options);
+end
 
-store_n(2) = x(end,1);
-
-W_EE = [15 0 0];
-[t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0, options);
-
-store_n(3) = x(end,1);
-
-W_EE = [20 0 0];
-[t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0, options);
-
-store_n(4) = x(end,1);
-
+figure();
+plot(wind_speeds,distance_x);
+xlabel('Wind Speed (m/s)');
+ylabel('Distance North (m)');
+title('Distance Traveled North at Various Northern Wind Speeds'); hold off;
 
 % total distance from origin to landing position + wind in North direction
 
-store_t = zeros(4);
+distance_all = zeros(length(wind_speeds),1);
 
-W_EE = [5 0 0];
-[t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0, options);
+for i = 1:length(wind_speeds)
 
-store_t(1) = sqrt((x(end,1))^2 + (x(end,2))^2);
+    W_EE = [wind_speeds(i) 0 0];
+    [t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0, options);
+    distance_all(i) = sqrt( (x(end,1))^2 + (x(end,2))^2 );
 
-W_EE = [10 0 0];
-[t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0, options);
+end
 
-store_t(2) = sqrt((x(end,1))^2 + (x(end,2))^2);
-
-W_EE = [15 0 0];
-[t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0, options);
-
-store_t(3) = sqrt((x(end,1))^2 + (x(end,2))^2);
-
-W_EE = [20 0 0];
-[t,x] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,W_EE), t_span, x_0, options);
-
-store_t(4) = sqrt((x(end,1))^2 + (x(end,2))^2);
+figure(); 
+plot(wind_speeds,distance_all);
+xlabel('Wind Speed (m/s)');
+ylabel('Total Distance (m)');
+title('Total Distance Traveled at Various Northern Wind Speeds');
 
 %% Problem 2e part 1
 
 altitudes = [0,1000,1655,2000,3000,4000];
-wind_speeds = [0,5,10,15,20,25,30];
+wind_speeds = [0,5,10,15,20,25,30,35,40,45,50];
 distance_total = zeros(length(altitudes),length(wind_speeds));
 
 for i = 1:length(altitudes)
@@ -97,13 +86,16 @@ for i = 1:length(altitudes)
 
     end
 
-    plot(wind_speeds,distance_total);
-    xlabel('Wind Speed (m/s)');
-    ylabel('Total Distance from Origin (m)');
-    title('Total distance Trvaeled at Various Altitudes and Wind Speeds');
-    legend('0 m', '1000 m','1655 m', '2000 m','3000 m', '4000 m');
+    
 
 end
+
+figure();
+plot(wind_speeds,distance_total);
+xlabel('Wind Speed (m/s)');
+ylabel('Total Distance from Origin (m)');
+title('Total distance Trvaeled at Various Altitudes and Wind Speeds');
+legend('0 m', '1000 m','1655 m', '2000 m','3000 m', '4000 m');
 
 %% Problem 2e part 2
 
@@ -128,7 +120,7 @@ ylabel('Total Distance from Origin (m)'); hold off;
 
 %% Problem 2f
 rho = stdatmo(1655);
-wind_speeds = [0,5,10,15,20,25,30];
+wind_speeds = [0,5,10,15,20,25,30,35,40,45,50];
 masses = linspace(0.001,.3,100); % mass in kilos
 total_energy = 20; % joules
 distance_2 = zeros(length(wind_speeds),length(masses));
@@ -153,7 +145,9 @@ plot(masses,distance_2);
 xlabel('Mass (kg)');
 ylabel('Total Distance (m)');
 title('Total Distance Traveled at Various Wind Speeds and Masses');
-legend('0 m/s East','5 m/s East','10 m/s East','15 m/s East','20 m/s East','25 m/s East','30 m/s East');
+legend('0 m/s East','5 m/s East','10 m/s East','15 m/s East','20 m/s East', ...
+    '25 m/s East','30 m/s East','35 m/s East','40 m/s East','45 m/s East', ...
+    '50 m/s East');
 
 %% Function (Problem 2a)
 
